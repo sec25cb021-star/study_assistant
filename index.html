@@ -1,0 +1,321 @@
+<title>Priya's Study Assistant</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+  /* Layout: sticker-sheet look. Loud lemon hero with a live sound wave, chunky outlined cards with hard shadows, slightly tilted stickers. */
+  :root {
+    --ink: #17143a;
+    --lemon: #ffe14a;
+    --pink: #ff4d94;
+    --blue: #3b5bff;
+    --mint: #35e0a1;
+    --sky: #bcd0ff;
+    --white: #ffffff;
+    --bg: #f3f5ff;
+    --fg: #17143a;
+    --muted: #4d4872;
+    --shadow: #17143a;
+    --font-display: "Bricolage Grotesque", "Arial Black", system-ui, sans-serif;
+    --font-body: "DM Sans", "Segoe UI", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14112e;
+      --fg: #f4f2ff;
+      --muted: #bdb7e0;
+      --shadow: #f4f2ff;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14112e;
+    --fg: #f4f2ff;
+    --muted: #bdb7e0;
+    --shadow: #f4f2ff;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  a:focus-visible { outline: 4px solid var(--blue); outline-offset: 4px; }
+
+  .wrap {
+    max-width: 960px;
+    margin-inline: auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+
+  /* ---------- hero ---------- */
+  .hero {
+    background: var(--lemon);
+    color: var(--ink);
+    border-bottom: 4px solid var(--ink);
+    margin-top: calc(-1 * env(safe-area-inset-top, 0px));
+    padding-top: calc(env(safe-area-inset-top, 0px) + 2rem);
+    padding-bottom: 0;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem 3rem;
+    align-items: center;
+  }
+  .hero-grid > * { min-width: 0; }
+
+  .brand {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--lemon);
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    margin: 0 0 1.25rem;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.5rem, 9vw, 4.6rem);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    margin: 0 0 1.25rem;
+    text-wrap: balance;
+  }
+  h1 .mark {
+    display: inline-block;
+    background: var(--pink);
+    padding: 0 0.18em 0.06em;
+    border: 3px solid var(--ink);
+    border-radius: 0.2em;
+    transform: rotate(-2deg);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .lede { font-size: 1.15rem; max-width: 34ch; margin: 0 0 1.75rem; font-weight: 500; }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: var(--ink);
+    color: var(--lemon);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.35rem;
+    text-decoration: none;
+    padding: 1rem 1.7rem;
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    box-shadow: 6px 6px 0 var(--pink);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .cta:hover { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--pink); }
+  .cta svg { width: 1.5rem; height: 1.5rem; flex: none; }
+  .fine { font-size: 0.92rem; margin: 1.1rem 0 0; font-weight: 500; }
+
+  /* chat sticker */
+  .chat { display: flex; flex-direction: column; gap: 1rem; padding: 0.5rem 0.25rem; }
+  .chat .label {
+    align-self: flex-start;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .bubble {
+    border: 3px solid var(--ink);
+    border-radius: 1.2rem;
+    padding: 0.85rem 1.1rem;
+    max-width: 92%;
+    box-shadow: 5px 5px 0 var(--ink);
+    font-weight: 500;
+    margin: 0;
+  }
+  .bubble.you { background: var(--white); align-self: flex-end; border-bottom-right-radius: 0.3rem; transform: rotate(1.5deg); }
+  .bubble.bot { background: var(--mint); align-self: flex-start; border-bottom-left-radius: 0.3rem; transform: rotate(-1.5deg); }
+  .bubble b { display: block; font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.15rem; }
+
+  /* sound wave */
+  .wave {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    height: 96px;
+    margin-top: 2.25rem;
+    padding-bottom: 1.5rem;
+  }
+  .wave span {
+    flex: 1 1 0;
+    min-width: 4px;
+    max-width: 22px;
+    height: var(--h);
+    border-radius: 999px;
+    background: var(--ink);
+    transform-origin: center;
+    animation: pulse 1.4s ease-in-out infinite;
+    animation-delay: var(--d);
+  }
+  .wave span:nth-child(3n+1) { background: var(--pink); }
+  .wave span:nth-child(3n+2) { background: var(--blue); }
+  @keyframes pulse { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+
+  /* ---------- sections ---------- */
+  section { padding-top: 3.5rem; }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.7rem, 5vw, 2.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin: 0 0 1.5rem;
+    text-wrap: balance;
+  }
+
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; list-style: none; margin: 0; padding: 0; counter-reset: step; }
+  .steps li {
+    counter-increment: step;
+    border: 3px solid var(--ink);
+    border-radius: 1.2rem;
+    padding: 1.2rem 1.3rem 1.4rem;
+    box-shadow: 6px 6px 0 var(--shadow);
+    color: var(--ink);
+    min-width: 0;
+  }
+  .steps li::before {
+    content: counter(step);
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+  .steps li:nth-child(1) { background: var(--pink); }
+  .steps li:nth-child(2) { background: var(--mint); }
+  .steps li:nth-child(3) { background: var(--sky); }
+  .steps h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; margin: 0 0 0.25rem; }
+  .steps p { margin: 0; font-weight: 500; }
+
+  .prompts { list-style: none; margin: 0; padding: 0.5rem 0 0; display: flex; flex-wrap: wrap; gap: 1rem 0.9rem; }
+  .prompts li {
+    border: 3px solid var(--ink);
+    border-radius: 0.9rem;
+    padding: 0.55rem 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    box-shadow: 4px 4px 0 var(--shadow);
+    min-width: 0;
+  }
+  .prompts li:nth-child(4n+1) { background: var(--lemon); transform: rotate(-2deg); }
+  .prompts li:nth-child(4n+2) { background: var(--mint); transform: rotate(1.5deg); }
+  .prompts li:nth-child(4n+3) { background: var(--pink); transform: rotate(-1deg); }
+  .prompts li:nth-child(4n+4) { background: var(--sky); transform: rotate(2deg); }
+
+  .tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.75rem; }
+  .tip { min-width: 0; border-top: 5px solid var(--fg); padding-top: 0.8rem; }
+  .tip h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; margin: 0 0 0.3rem; }
+  .tip p { margin: 0; color: var(--muted); }
+
+  footer { padding-block: 3.5rem 2.5rem; }
+  footer p { margin: 0; color: var(--muted); font-size: 0.92rem; font-weight: 500; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wave span { animation: none; transform: scaleY(0.8); }
+    .cta { transition: none; }
+    .cta:hover { transform: none; box-shadow: 6px 6px 0 var(--pink); }
+  }
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="brand">Priya's Study Assistant</p>
+        <h1>Got a doubt? Say it <span class="mark">out loud.</span></h1>
+        <p class="lede">A voice assistant that explains things in simple words and talks back.</p>
+        <a class="cta" href="https://elevenlabs.io/app/talk-to?agent_id=agent_8501m7dekf0ke6x9ngbbymyjq6a4" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg>
+          Start talking
+        </a>
+        <p class="fine">Opens in a new tab and asks to use your microphone.</p>
+      </div>
+      <div class="chat" aria-label="Example conversation">
+        <p class="label">Example chat</p>
+        <p class="bubble you"><b>You</b>Explain recursion in simple words.</p>
+        <p class="bubble bot"><b>Assistant</b>It's a function that calls itself until it reaches a stopping point, like opening boxes inside boxes.</p>
+      </div>
+    </div>
+    <div class="wave" aria-hidden="true">
+      <span style="--h:30%;--d:-0.2s"></span><span style="--h:55%;--d:-0.9s"></span><span style="--h:80%;--d:-0.4s"></span><span style="--h:45%;--d:-1.1s"></span><span style="--h:95%;--d:-0.6s"></span><span style="--h:60%;--d:-0.1s"></span><span style="--h:35%;--d:-1.3s"></span><span style="--h:75%;--d:-0.7s"></span><span style="--h:100%;--d:-0.3s"></span><span style="--h:50%;--d:-1s"></span><span style="--h:70%;--d:-0.5s"></span><span style="--h:40%;--d:-1.2s"></span><span style="--h:90%;--d:-0.8s"></span><span style="--h:55%;--d:-0.15s"></span><span style="--h:30%;--d:-0.95s"></span><span style="--h:85%;--d:-0.45s"></span><span style="--h:65%;--d:-1.25s"></span><span style="--h:45%;--d:-0.65s"></span><span style="--h:95%;--d:-0.05s"></span><span style="--h:60%;--d:-0.85s"></span><span style="--h:35%;--d:-0.35s"></span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="wrap">
+      <h2>Three taps and you're talking</h2>
+      <ol class="steps">
+        <li><h3>Press the button</h3><p>Hit Start talking. A new tab opens.</p></li>
+        <li><h3>Allow the mic</h3><p>Your browser asks once. Say yes.</p></li>
+        <li><h3>Ask away</h3><p>Speak normally and wait for the reply.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Not sure what to ask?</h2>
+      <ul class="prompts">
+        <li>What is a variable in Python?</li>
+        <li>Plan my study time for tomorrow</li>
+        <li>RAM vs ROM?</li>
+        <li>Give me an exam tip</li>
+        <li>Explain recursion with an example</li>
+        <li>Quiz me on what I just learned</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Little things that help</h2>
+      <div class="tips">
+        <div class="tip">
+          <h3>Wear earphones</h3>
+          <p>Otherwise it hears its own voice from your speaker and gets confused.</p>
+        </div>
+        <div class="tip">
+          <h3>Let it finish</h3>
+          <p>Wait until it stops speaking before you ask the next thing.</p>
+        </div>
+        <div class="tip">
+          <h3>Keep it short</h3>
+          <p>Free minutes are limited, so a two or three minute chat is perfect.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>A student project built with Python and ElevenLabs.</p>
+  </div>
+</footer>
